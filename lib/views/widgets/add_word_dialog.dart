@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vocabularynoteswithhive/controllers/read_data_cubit/cubit/read_data_cubit.dart';
 import 'package:vocabularynoteswithhive/controllers/write_data_cubit/cubit/write_data_cubit.dart';
+import 'package:vocabularynoteswithhive/views/styles/color_manager.dart';
 import 'package:vocabularynoteswithhive/views/widgets/arabic_or_english_widget.dart';
 import 'package:vocabularynoteswithhive/views/widgets/color_widget.dart';
 import 'package:vocabularynoteswithhive/views/widgets/custom_form.dart';
@@ -20,7 +21,16 @@ class _AddWordDialogState extends State<AddWordDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      child: BlocBuilder<WriteDataCubit, WriteDataState>(
+      child: BlocConsumer<WriteDataCubit, WriteDataState>(
+        listener: (context, state) {
+          if (state is WriteDataSuccess) {
+            Navigator.pop(context);
+          }
+          if (state is WriteDataFailure) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(_getSnackBar(state.message));
+          }
+        },
         builder: (context, state) {
           return AnimatedContainer(
             padding: const EdgeInsets.all(10),
@@ -58,4 +68,14 @@ class _AddWordDialogState extends State<AddWordDialog> {
       ),
     );
   }
+
+  SnackBar _getSnackBar(String message) => SnackBar(
+      backgroundColor: ColorManger.red,
+      content: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          message,
+          style: const TextStyle(color: ColorManger.white),
+        ),
+      ));
 }

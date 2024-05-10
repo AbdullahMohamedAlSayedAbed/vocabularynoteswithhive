@@ -23,7 +23,7 @@ class WriteDataCubit extends Cubit<WriteDataState> {
 
   void updateIsArabic(bool isArabic) {
     this.isArabic = isArabic;
-      emit(WriteDataInitial());
+    emit(WriteDataInitial());
   }
 
   void updateColorCode(int colorCode) {
